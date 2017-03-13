@@ -3,6 +3,7 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth import logout
 from models import Doctor
+from .forms import PatientForm
 
 #Python
 import datetime
@@ -18,11 +19,14 @@ def index(request):
 
 def home(request):
     """Patient Check-in"""
-    return render(request, 'home.html')
+
+    form = PatientForm()
+    return render(request, 'home.html', {'form': form})
 
 
 def drchrono_login(request):
-    print request
+    """Drchrono Authorization and authentication"""
+
     if 'error' in request.GET:
         raise ValueError('Error authorizing application: %s' % request.GET['error'])
 
@@ -48,9 +52,27 @@ def drchrono_login(request):
     except Doctor.DoesNotExist:
         auth_token = Doctor(user=request.user, access_token=access_token, refresh_token=refresh_token,
                         expires_timestamp=expires_timestamp)
-    auth_token.save()
+        auth_token.save()
 
     return HttpResponseRedirect(reverse('home'))
+
+
+def patient_chart(request):
+    """Patient chart that gets updated by patient on check in"""
+
+    headers = {
+        'Authorization': 'Bearer ACCESS_TOKEN',
+    }
+
+    patient_info = []
+    patients_url = 'https://drchrono.com/api/patients'
+
+    while patients_url:
+        data = requests.get(patients_url, headers=headers).json()
+        patient_info.extend(data['results'])
+        patients_url = data['next']
+
+    return render(request, 'demographic.html')
 
 
 def drchrono_logout(request):

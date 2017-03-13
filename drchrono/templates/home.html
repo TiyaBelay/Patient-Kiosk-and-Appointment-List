@@ -1,13 +1,15 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load bootstrap%}
 {% block content %}
+
     <h1>Check In Kiosk</h1>
 
     <p>Please confirm your identity</p>
 
     <form method="post" action=".">
         {% csrf_token %}
-        {{form.as_p}}
+        {{ form.as_p }}
         <input class="btn btn-primary" type="submit" value="Submit" />
     </form>
 
