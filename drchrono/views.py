@@ -43,7 +43,10 @@ def drchrono_login(request):
     refresh_token = data['refresh_token']
     expires_timestamp = datetime.datetime.now(pytz.utc) + datetime.timedelta(seconds=data['expires_in'])
 
-    auth_token = Doctor(user=request.user, access_token=access_token, refresh_token=refresh_token,
+    try:
+        auth_token = request.user
+    except Doctor.DoesNotExist:
+        auth_token = Doctor(user=request.user, access_token=access_token, refresh_token=refresh_token,
                         expires_timestamp=expires_timestamp)
     auth_token.save()
 

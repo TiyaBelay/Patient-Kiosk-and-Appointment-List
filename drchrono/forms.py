@@ -1,3 +1,8 @@
 from django import forms
+from .models import Patient
 
-# forms go here
+
+class PatientForm(forms.ModelForm):
+    class Meta:
+        model = Patient
+        fields = ['first_name', 'last_name', 'ssn', 'date_of_birth']

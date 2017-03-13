@@ -13,6 +13,9 @@ class Doctor(models.Model):
     refresh_token = models.CharField(max_length=200)
     expires_timestamp = models.CharField(max_length=200)
 
+    def __str__(self):
+        return self.user
+
 
 class Patient(models.Model):
     patient_id = models.IntegerField(primary_key=True)
@@ -20,3 +23,7 @@ class Patient(models.Model):
     last_name = models.CharField(max_length=30)
     date_of_birth = models.DateField()
     ssn = models.IntegerField()
+
+    def __str__(self):
+        return self.first_name
+
