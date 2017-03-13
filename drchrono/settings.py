@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'drchrono',
     'bootstrapform',
+    'crispy_forms',
     'social.apps.django_app.default',
 )
 

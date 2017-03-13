@@ -1,16 +1,22 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% load bootstrap%}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
 {% block content %}
 
-    <h1>Check In Kiosk</h1>
+<h1><center>Check-In Kiosk</center></h1>
 
-    <p>Please confirm your identity</p>
+<br>
+<center>Please confirm your identity</center>
+<br>
 
-    <form method="post" action=".">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input class="btn btn-primary" type="submit" value="Submit" />
-    </form>
+<form method="post" action="/demographic/" align="center" class="form-group">
+    {% csrf_token %}
+    <div class="fieldWrapper">
+        {{ form|crispy }}
+        <br>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
 
 {% endblock %}

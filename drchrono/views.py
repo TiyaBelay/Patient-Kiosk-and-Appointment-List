@@ -57,7 +57,7 @@ def drchrono_login(request):
     return HttpResponseRedirect(reverse('home'))
 
 
-def patient_chart(request):
+def patient_demographic(request):
     """Patient chart that gets updated by patient on check in"""
 
     headers = {
@@ -67,14 +67,26 @@ def patient_chart(request):
     patient_info = []
     patients_url = 'https://drchrono.com/api/patients'
 
-    while patients_url:
-        data = requests.get(patients_url, headers=headers).json()
-        patient_info.extend(data['results'])
-        patients_url = data['next']
+    # while patients_url:
+    #     data = requests.get(patients_url, headers=headers).json()
+    #     patient_info.extend(data['results'])
+    #     patients_url = data['next']
 
     return render(request, 'demographic.html')
 
 
+def appointments(request):
+    """Lists all of today's appointments."""
+
+    return render(request, 'appointment.html')
+
+
+def patient_wait_period(request):
+    pass
+
+
 def drchrono_logout(request):
+    """Log out"""
+
     logout(request)
     return HttpResponseRedirect('/')
