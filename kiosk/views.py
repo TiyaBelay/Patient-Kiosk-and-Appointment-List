@@ -1,32 +1,20 @@
 #Django
 from django.shortcuts import render, HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from .models import Doctor
 from django.contrib.auth import logout
-from models import Doctor
 
 #Python
 import datetime
-import requests, pytz
 
 from drchrono.settings import SOCIAL_AUTH_DRCHRONO_KEY, SOCIAL_AUTH_DRCHRONO_SECRET
 
 
-def index(request):
-    """Sign In"""
-    return render(request, 'index.html')
-
-
-def home(request):
-    """Patient Check-in"""
-    return render(request, 'home.html')
-
-
 def drchrono_login(request):
-    print request
     if 'error' in request.GET:
         raise ValueError('Error authorizing application: %s' % request.GET['error'])
 
-    response = requests.post('https://drchrono.com/o/token/', data={
+    response = request.post('https://kiosk.com/o/token/', data={
         'code': request.GET['code'],
         'grant_type': 'authorization_code',
         'redirect_uri': 'http://localhost:8000/login',
@@ -46,7 +34,6 @@ def drchrono_login(request):
     auth_token = Doctor(user=request.user, access_token=access_token, refresh_token=refresh_token,
                         expires_timestamp=expires_timestamp)
     auth_token.save()
-
     return HttpResponseRedirect(reverse('home'))
 
 
