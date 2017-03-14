@@ -6,7 +6,7 @@ from django.contrib.auth import logout
 
 #Project
 from .models import Doctor, Patient
-from .forms import PatientForm
+from .forms import PatientForm, DemographicForm
 
 #Python
 import re
@@ -105,7 +105,11 @@ def patient_demographic(request):
                               date_of_birth=data['date_of_birth'])
             patient.save()
 
-    return render(request, 'demographic.html', {'patient_info': patient_info})
+    form = DemographicForm()
+
+    return render(request, 'demographic.html', {'form': form,
+                                                'patient_info': patient_info}
+                  )
 
 
 def set_appointment_status(request):
