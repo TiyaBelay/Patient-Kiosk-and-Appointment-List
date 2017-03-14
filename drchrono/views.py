@@ -1,4 +1,5 @@
 #Django
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth import logout
@@ -41,6 +42,7 @@ def check_in(request):
     return render(request, 'check_in.html', {'form': form})
 
 
+@login_required
 def drchrono_login(request):
     """Drchrono Authorization and authentication"""
 
@@ -65,11 +67,13 @@ def drchrono_login(request):
     expires_timestamp = datetime.datetime.now(pytz.utc) + datetime.timedelta(seconds=data['expires_in'])
 
     try:
-        auth_token = request.user
+        user = Doctor.objects.get(user=request.user)
     except Doctor.DoesNotExist:
-        auth_token = Doctor(user=request.user, access_token=access_token, refresh_token=refresh_token,
-                        expires_timestamp=expires_timestamp)
-        auth_token.save()
+        user = Doctor(
+            user=request.user, access_token=access_token, refresh_token=refresh_token,
+            expires_timestamp=expires_timestamp
+        )
+        user.save()
 
     return HttpResponseRedirect(reverse('home'))
 
