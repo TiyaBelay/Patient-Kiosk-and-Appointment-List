@@ -31,9 +31,6 @@ def home(request):
 
     form = PatientForm()
 
-    # if form.is_valid():
-    #     return HttpResponseRedirect('/demographic/')
-
     return render(request, 'home.html', {'form': form})
 
 
@@ -112,8 +109,17 @@ def patient_demographic(request):
                   )
 
 
+def checked_in(request):
+    """Patient completed check in."""
+
+    doc = Doctor.objects.get(user=request.user)
+
+    return render(request, 'checked_in.html', {'doc': doc})
+
+
 def set_appointment_status(request):
     """Set appointment status for patient to 'Arrived'"""
+
     pass
 
 
