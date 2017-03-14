@@ -4,4 +4,43 @@
 
 <h2><center>Update your demographic information</center></h2>
 
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Middle Name</th>
+                <th>Last Name</th>
+                <th>Date of Birth</th>
+                <th>Ethnicity</th>
+                <th>Gender</th>
+                <th>SSN</th>
+                <th>Address</th>
+                <th>Emergency Contact</th>
+                <th>Phone</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for list in patient_info %}
+            {% for data in list %}
+            <tr>
+                <td>{{ data.first_name }}</td>
+                <td>{{ data.middle_name }}</td>
+                <td>{{ data.last_name }}</td>
+                <td>{{ data.date_of_birth }}</td>
+                <td>{{ data.ethnicity }}</td>
+                <td>{{ data.gender }}</td>
+                <td>{{ data.social_security_number }}</td>
+                <td>{{ data.address }}</td>
+                <td>{{ data.emergency_contact }}</td>
+                <td>{{ data.home_phone }}</td>
+                <td>{{ data.email }}</td>
+            </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 {% endblock %}

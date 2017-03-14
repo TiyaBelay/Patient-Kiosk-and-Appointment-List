@@ -3,10 +3,13 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth import logout
-from models import Doctor
+
+#Project
+from .models import Doctor, Patient
 from .forms import PatientForm
 
 #Python
+import re
 import datetime
 import requests, pytz
 
@@ -67,7 +70,7 @@ def drchrono_login(request):
     expires_timestamp = datetime.datetime.now(pytz.utc) + datetime.timedelta(seconds=data['expires_in'])
 
     try:
-        user = Doctor.objects.get(user=request.user)
+        Doctor.objects.get(user=request.user)
     except Doctor.DoesNotExist:
         user = Doctor(
             user=request.user, access_token=access_token, refresh_token=refresh_token,
@@ -81,19 +84,28 @@ def drchrono_login(request):
 def patient_demographic(request):
     """Patient chart that gets updated by patient on check in"""
 
+    user = Doctor.objects.get(user=request.user)
+
     headers = {
-        'Authorization': 'Bearer ACCESS_TOKEN',
+        'Authorization': 'Bearer %s' % user.access_token,
     }
 
     patient_info = []
     patients_url = 'https://drchrono.com/api/patients'
 
-    # while patients_url:
-    #     data = requests.get(patients_url, headers=headers).json()
-    #     patient_info.extend(data['results'])
-    #     patients_url = data['next']
+    while patients_url:
+        data = requests.get(patients_url, headers=headers).json()
+        patient_info.append(data['results'])
+        patients_url = data['next']
 
-    return render(request, 'demographic.html')
+    for data_list in patient_info:
+        for data in data_list:
+            patient = Patient(patient_id=data['id'], first_name=data['first_name'],
+                              last_name=data['last_name'],
+                              date_of_birth=data['date_of_birth'])
+            patient.save()
+
+    return render(request, 'demographic.html', {'patient_info': patient_info})
 
 
 def set_appointment_status(request):

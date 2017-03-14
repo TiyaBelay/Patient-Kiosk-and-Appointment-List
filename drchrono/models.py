@@ -21,8 +21,7 @@ class Patient(models.Model):
     patient_id = models.IntegerField(primary_key=True)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
-    date_of_birth = models.DateField()
-    ssn = models.IntegerField()
+    date_of_birth = models.DateField(null=True)
 
     def __unicode__(self):
         return self.first_name
