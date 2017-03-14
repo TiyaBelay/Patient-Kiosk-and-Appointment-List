@@ -12,6 +12,11 @@ import requests, pytz
 from drchrono.settings import SOCIAL_AUTH_DRCHRONO_KEY, SOCIAL_AUTH_DRCHRONO_SECRET
 
 
+def oauth_flow(request):
+    pass
+    return
+
+
 def index(request):
     """Sign In"""
     return render(request, 'index.html')
@@ -21,7 +26,19 @@ def home(request):
     """Patient Check-in"""
 
     form = PatientForm()
+
+    # if form.is_valid():
+    #     return HttpResponseRedirect('/demographic/')
+
     return render(request, 'home.html', {'form': form})
+
+
+def check_in(request):
+    """Patient Check-in"""
+
+    form = PatientForm()
+
+    return render(request, 'check_in.html', {'form': form})
 
 
 def drchrono_login(request):
@@ -75,6 +92,11 @@ def patient_demographic(request):
     return render(request, 'demographic.html')
 
 
+def set_appointment_status(request):
+    """Set appointment status for patient to 'Arrived'"""
+    pass
+
+
 def appointments(request):
     """Lists all of today's appointments."""
 
@@ -82,6 +104,12 @@ def appointments(request):
 
 
 def patient_wait_period(request):
+    """Display how long a patient waited for"""
+    pass
+
+
+def average_wait_time(request):
+    """Display average wait time for all patients"""
     pass
 
 

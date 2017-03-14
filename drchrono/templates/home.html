@@ -1,22 +1,13 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load crispy_forms_tags %}
-{% load crispy_forms_field %}
 {% block content %}
 
-<h1><center>Check-In Kiosk</center></h1>
-
-<br>
-<center>Please confirm your identity</center>
-<br>
-
-<form method="post" action="/demographic/" align="center" class="form-group">
-    {% csrf_token %}
-    <div class="fieldWrapper">
-        {{ form|crispy }}
-        <br>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </div>
-</form>
+<div align="center" style="padding-top: 250px;">
+  <a type="button" class="btn btn-info btn-lg" href="{% url 'appointments' %}"> Today's Appointments
+  </a>
+  <a type="button" class="btn btn-info btn-lg" href="{% url 'check_in' %}"> Patient Check-In
+  </a>
+</div>
 
 {% endblock %}
