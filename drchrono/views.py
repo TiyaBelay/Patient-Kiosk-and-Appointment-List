@@ -157,12 +157,6 @@ def checked_in(request):
     return render(request, 'checked_in.html', {'doc': doc})
 
 
-def schedule_app(request):
-    """Patient schedules appointment"""
-
-    return render(request, 'schedule_app.html')
-
-
 def appointments(request):
     """Lists all of today's appointments."""
 
@@ -183,19 +177,19 @@ def appointments(request):
 
     appointments_url = 'https://drchrono.com/api/appointments'
 
-    # appointment_info = []
-
     data = requests.get(appointments_url, params={'data': data, 'date': datetime.date.today()}, headers=headers).json()
     appointment_info = data['results']
 
     patients_and_appointments = []
 
     for i, appointment in enumerate(appointment_info):
-        patient = Patient.objects.filter(patient_id=appointment['patient']).values()[0]
-        combined_dict = dict(patient.items() + appointment.items())
-        patients_and_appointments.append(combined_dict)
+        patient = Patient.objects.filter(patient_id=appointment['patient'])
+        if len(patient.values()) != 0:
+            each_patient = patient.values()[0]
+            combined_dict = dict(each_patient.items() + appointment.items())
+            patients_and_appointments.append(combined_dict)
 
-    return render(request, 'appointment.html', {'patients_and_appointments': patients_and_appointments})
+        return render(request, 'appointment.html', {'patients_and_appointments': patients_and_appointments})
 
 
 def patient_wait_period(request):

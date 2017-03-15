@@ -2,9 +2,10 @@
 {% load staticfiles %}
 {% block content %}
 
-<h1><center>Today's Appointments</center></h1>
+<h2><center style="color:green;">Today's Appointments</center></h2>
+<br>
 <table class="table table-condensed table-striped">
-    <thead>
+    <thead style="color:green;">
         <tr>
             <th>Patient First Name</th>
             <th>Patient Last Name</th>
@@ -21,7 +22,7 @@
             <tr>
                 <td>{{ appointment.first_name }}</td>
                 <td>{{ appointment.last_name }}</td>
-                <td>{{ appointment.schedule_time }}</td>
+                <td>{{ appointment.scheduled_time}}</td>
                 <td>{{ appointment.exam_room }}</td>
                 <td>{{ appointment.duration }}</td>
                 <td>{{ appointment.appointment_status }}</td>

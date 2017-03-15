@@ -13,7 +13,7 @@ urlpatterns = [
     url(r'^check_in/$', views.check_in, name="check_in"),
     url(r'^demographic/$', views.patient_demographic, name='demographic'),
     url(r'^appointments/$', views.appointments, name='appointments'),
-    url(r'^schedule_app/$', views.schedule_app, name='schedule_app'),
+    # url(r'^schedule_app/$', views.schedule_app, name='schedule_app'),
     url(r'^checked_in/$', views.checked_in, name="checked_in"),
     url(r'', include('social.apps.django_app.urls', namespace='social')),
 
