@@ -2,6 +2,34 @@
 {% load staticfiles %}
 {% block content %}
 
-    <h1><center>Today's Appointments</center></h1>
+<h1><center>Today's Appointments</center></h1>
+<table class="table table-condensed table-striped">
+    <thead>
+        <tr>
+            <th>Patient First Name</th>
+            <th>Patient Last Name</th>
+            <th>Appointment Time</th>
+            <th>Exam Room</th>
+            <th>Duration</th>
+            <th>Status</th>
+            <th>Check In Time</th>
+            <th>Wait Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for appointment in patients_and_appointments %}
+            <tr>
+                <td>{{ appointment.first_name }}</td>
+                <td>{{ appointment.last_name }}</td>
+                <td>{{ appointment.schedule_time }}</td>
+                <td>{{ appointment.exam_room }}</td>
+                <td>{{ appointment.duration }}</td>
+                <td>{{ appointment.appointment_status }}</td>
+                <td>{{ appointment.check_in }}</td>
+                <td>{{ appointment.wait_time }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 {% endblock %}

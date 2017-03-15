@@ -12,18 +12,17 @@
 {% if messages %}
 <ul class="messages" style="color:red;">
     {% for message in messages %}
-    <center><li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li></center>
+    <center><li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li></center>
     {% endfor %}
 </ul>
 {% endif %}
 
-<form method="post" action="/demographic/" align="center" class="form-group">
+<form method="post" action="/demographic/" align="center" class="form-group" style="border-radius:50px;">
+    <legend></legend>
     {% csrf_token %}
-    <div class="fieldWrapper">
-        {{ form|crispy }}
-        <br>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </div>
+    {{ form|crispy }}
+    <br>
+    <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 
 {% endblock %}

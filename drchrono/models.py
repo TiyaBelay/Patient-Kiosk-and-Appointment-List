@@ -9,7 +9,7 @@ class Doctor(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     user = models.OneToOneField(User)
-    office = models.IntegerField(default=345678)
+    office = models.IntegerField(default=3456)
 
     #OAuth stored in Doctor model since it has One to One relationship with user
     access_token = models.CharField(max_length=200)

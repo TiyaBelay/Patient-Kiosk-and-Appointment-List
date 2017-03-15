@@ -28,7 +28,7 @@ def authorize(request):
     base_url = 'https://drchrono.com/o/authorize/'
     redirect_uri = 'http://localhost:8000/login'
     client_id = '2xMAgUko6q02uM8IDnWiNynNwqbhuc7dpgKMxHmE'
-    scope = 'patients:read calendar:read calendar:write clinical:read clinical:write'
+    scope = 'patients:read user:read user:write calendar:read calendar:write clinical:read clinical:write'
     url = base_url + "?redirect_uri={}&response_type=code&client_id={}&scope={}".format(redirect_uri, client_id, scope)
 
     return HttpResponseRedirect(url)
@@ -126,9 +126,9 @@ def patient_demographic(request):
                 form = DemographicForm(instance=patient[0])
                 return render(request, 'demographic.html', {'form': form})
             else:
-                Patient.objects.create(first_name=first_name, last_name=last_name, date_of_birth=date_of_birth)
-            return redirect('demographic')
-
+                patient = Patient.objects.create(first_name=first_name, last_name=last_name, date_of_birth=date_of_birth)
+                form = DemographicForm(instance=patient)
+                return render(request, 'demographic.html', {'form': form})
         else:
             messages.error(request, "Error: Please enter your information.")
 
@@ -158,25 +158,9 @@ def checked_in(request):
 
 
 def schedule_app(request):
+    """Patient schedules appointment"""
 
-    user = Doctor.objects.get(user=request.user)
-
-    headers = {
-        'Authorization': 'Bearer %s' % user.access_token,
-    }
-
-    data = {
-        'doctor': user.doctor_id,
-        'duration': 30,
-        'office': 3456,
-        'patient': 63536571,
-        'scheduled_time': '2017-03-15T14:30:00',
-    }
-    url = 'https://drchrono.com/api/appointments'
-
-    r = requests.post(url, data=data, headers=headers)
-
-    return HttpResponseRedirect(r)
+    return render(request, 'schedule_app.html')
 
 
 def appointments(request):
@@ -188,13 +172,30 @@ def appointments(request):
         'Authorization': 'Bearer %s' % user.access_token,
     }
 
-    appointment_info = []
+    data = {
+        'doctor': 125656,
+        'duration': 30,
+        'office': 133390,
+        'patient': 63536566,
+        'scheduled_time': '2014-08-01T14:30:00',
+        'exam_room': 1,
+    }
+
     appointments_url = 'https://drchrono.com/api/appointments'
 
-    data = requests.get(appointments_url, params={'date': datetime.date.today()}, headers=headers).json()
-    appointment_info.append(data['results'])
+    # appointment_info = []
 
-    return render(request, 'appointment.html', {'appointment_info': appointment_info})
+    data = requests.get(appointments_url, params={'data': data, 'date': datetime.date.today()}, headers=headers).json()
+    appointment_info = data['results']
+
+    patients_and_appointments = []
+
+    for i, appointment in enumerate(appointment_info):
+        patient = Patient.objects.filter(patient_id=appointment['patient']).values()[0]
+        combined_dict = dict(patient.items() + appointment.items())
+        patients_and_appointments.append(combined_dict)
+
+    return render(request, 'appointment.html', {'patients_and_appointments': patients_and_appointments})
 
 
 def patient_wait_period(request):
