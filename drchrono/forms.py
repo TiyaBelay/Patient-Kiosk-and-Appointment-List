@@ -14,3 +14,9 @@ class DemographicForm(forms.ModelForm):
         fields = ['first_name', 'middle_name', 'last_name', 'date_of_birth', 'gender', 'address', 'city',
                   'state', 'zip_code', 'cell_phone', 'email', 'emergency_contact_name', 'emergency_contact_phone',
                   'emergency_contact_relation', 'ethnicity', 'preferred_language', 'race', 'social_security_number']
+
+    def __init__(self, *args, **kwargs):
+        super(DemographicForm, self).__init__(*args, **kwargs)
+
+        for key in self.fields:
+            self.fields[key].required = False
