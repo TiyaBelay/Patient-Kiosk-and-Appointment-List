@@ -7,6 +7,11 @@ class PatientForm(forms.ModelForm):
         model = Patient
         fields = ['first_name', 'last_name', 'date_of_birth']
 
+    def __init__(self, *args, **kwargs):
+        super(PatientForm, self).__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
 
 class DemographicForm(forms.ModelForm):
     class Meta:
@@ -20,3 +25,6 @@ class DemographicForm(forms.ModelForm):
 
         for key in self.fields:
             self.fields[key].required = False
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'

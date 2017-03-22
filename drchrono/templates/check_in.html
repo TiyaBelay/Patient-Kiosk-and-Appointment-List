@@ -17,8 +17,10 @@
 </ul>
 {% endif %}
 
-<form method="post" action="/demographic/" align="center" class="form-group" style="border-radius:50px;">
-    <legend></legend>
+<legend></legend>
+<br>
+
+<form method="post" action="/demographic/" align="center" class="form-group col-sm-2 col-sm-offset-5">
     {% csrf_token %}
     {{ form|crispy }}
     <br>

@@ -5,7 +5,10 @@
 
 <h2><center>Update your demographic information</center></h2>
 
-<form method="post" action="/checked_in/" align="center" class="form-group">
+<legend></legend>
+<br>
+
+<form method="post" action="/checked_in/" align="center" class="form-group col-xs-3 col-xs-offset-4">
     {% csrf_token %}
     <div class="fieldWrapper">
         {{ form|crispy }}

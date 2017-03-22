@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from localflavor.us.models import USStateField, USPostalCodeField, PhoneNumberField, USSocialSecurityNumberField
+from localflavor.us.models import USStateField, USZipCodeField, PhoneNumberField, USSocialSecurityNumberField
 from django.utils.timezone import localtime, now
 
 
@@ -30,7 +30,7 @@ class Patient(models.Model):
     address = models.CharField(max_length=50, null=True)
     city = models.CharField(max_length=20, null=True)
     state = USStateField(max_length=2, null=True)
-    zip_code = USPostalCodeField(null=True)
+    zip_code = USZipCodeField(null=True)
     cell_phone = PhoneNumberField(null=True)
     email = models.CharField(max_length=40, null=True)
     emergency_contact_name = models.CharField(max_length=40, null=True)
