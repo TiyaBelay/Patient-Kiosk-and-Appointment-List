@@ -114,8 +114,4 @@ STATIC_URL = '/static/'
 
 from local_settings import *
 
-# Added to configure OAuth for kiosk:
-SOCIAL_AUTH_DRCHRONO_SCOPE = "patients:summary:read"
 LOGIN_REDIRECT_URL = "/"
-
-# AUTH_USER_MODEL = 'kiosk.User' #Must specify which user model you're using or else...

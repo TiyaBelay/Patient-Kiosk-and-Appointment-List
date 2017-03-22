@@ -34,12 +34,8 @@ def authorize(request):
     return HttpResponseRedirect(url)
 
 
-@login_required
 def drchrono_login(request):
-    """Drchrono Authorization and authentication"""
-
-    if 'error' in request.GET:
-        raise ValueError('Error authorizing application: %s' % request.GET['error'])
+    """Drchrono authorization & token exchange"""
 
     response = requests.post('https://drchrono.com/o/token/', data={
         'code': request.GET['code'],
@@ -51,7 +47,6 @@ def drchrono_login(request):
 
     response.raise_for_status()
     data = response.json()
-    print data
 
     # Saves these in database associated with the user
     access_token = data['access_token']
@@ -59,10 +54,17 @@ def drchrono_login(request):
     expires_timestamp = datetime.datetime.now(pytz.utc) + datetime.timedelta(seconds=data['expires_in'])
 
     try:
-        Doctor.objects.get(user=request.user)
+        current_user = Doctor.objects.get(user=request.user.id)
+
+        if current_user.expires_timestamp < unicode(datetime.date.today()):
+            current_user.access_token = access_token
+            current_user.refresh_token = refresh_token
+            current_user.expires_timestamp = expires_timestamp
+            current_user.save()
+
     except Doctor.DoesNotExist:
         user = Doctor(
-            first_name='John', last_name='Smith', user=request.user, access_token=access_token, refresh_token=refresh_token,
+            first_name='John', last_name='Smith', user=1, access_token=access_token, refresh_token=refresh_token,
             expires_timestamp=expires_timestamp
         )
         user.save()
@@ -170,8 +172,7 @@ def appointments(request):
         'doctor': 125656,
         'duration': 30,
         'office': 133390,
-        'patient': 63536566,
-        'scheduled_time': '2014-08-01T14:30:00',
+        'scheduled_time': '2017-03-15T08:30:00',
         'exam_room': 1,
     }
 
