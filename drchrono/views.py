@@ -172,30 +172,33 @@ def appointments(request):
         'doctor': 125656,
         'duration': 30,
         'office': 133390,
-        'scheduled_time': '2017-03-15T08:30:00',
         'exam_room': 1,
     }
 
     appointments_url = 'https://drchrono.com/api/appointments'
 
-    data = requests.get(appointments_url, params={'data': data, 'date': datetime.date.today()}, headers=headers).json()
+    data = requests.get(appointments_url, params={'data': data, 'date': datetime.date.today().strftime('%Y-%m-%d')},
+                        headers=headers).json()
     appointment_info = data['results']
 
     patients_and_appointments = []
 
-    for i, appointment in enumerate(appointment_info):
+    for appointment in appointment_info:
         patient = Patient.objects.filter(patient_id=appointment['patient'])
         if len(patient.values()) != 0:
             each_patient = patient.values()[0]
             combined_dict = dict(each_patient.items() + appointment.items())
             patients_and_appointments.append(combined_dict)
 
-        return render(request, 'appointment.html', {'patients_and_appointments': patients_and_appointments})
+    return render(request, 'appointment.html', {'patients_and_appointments': patients_and_appointments})
 
+#TODO: Patient wait period
+#TODO: Doctor needs to indicate that they are seeing a patient
+#TODO: Overall average wait time for patient
 
 def patient_wait_period(request):
     """Display how long a patient waited for"""
-    pass
+
 
 
 def average_wait_time(request):

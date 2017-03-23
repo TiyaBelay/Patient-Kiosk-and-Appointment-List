@@ -15,6 +15,7 @@
             <th>Status</th>
             <th>Check In Time</th>
             <th>Wait Time</th>
+            <th>Seeing Patient</th>
         </tr>
     </thead>
     <tbody>
@@ -28,6 +29,7 @@
                 <td>{{ appointment.appointment_status }}</td>
                 <td>{{ appointment.check_in }}</td>
                 <td>{{ appointment.wait_time }}</td>
+                <td><input type="checkbox"></td>
             </tr>
         {% endfor %}
     </tbody>
