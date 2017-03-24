@@ -1,5 +1,4 @@
 #Django
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth import logout
@@ -209,13 +208,11 @@ def appointments(request):
     return render(request, 'appointment.html', {'patients_and_appointments': patients_and_appointments})
 
 
-# TODO: Patient wait period
-# TODO: Doctor needs to indicate that they are seeing a patient
-# TODO: Overall average wait time for patient
+# def average_wait_time(wait_times):
+#     """Display average wait time for all patients"""
 
-def average_wait_time(request):
-    """Display average wait time for all patients"""
-    pass
+    # convert wait time to seconds
+    # calculate average and convert back to H:M:S format
 
 
 def drchrono_logout(request):

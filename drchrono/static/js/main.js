@@ -1,16 +1,15 @@
-var start = null;
-var timer = 0;
-
-//when patient is arrived, start timer
-$("#arrived").click(function() {
-    if (start !== null) return;
-    start = setInterval(function() {
-        timer += 1;
-        $("timer").val(value);
-        }, interval);
-    });
-
-$("#checkbox").click(function() {
-//    stop running timer when checkbox is checked
-
-})
+//var timer= 0;
+//$('#arrived').click(function () {
+//    timer = setInterval(function () {
+//        $.post({
+//            url: "/appointments/",
+//            data: { 'timer': $('#timer').val(timer+=1) },
+//            success: function() {
+//                $("#timer").value(timer+=1);
+//            }
+//        });
+//    }, 100000);
+//    if ($('#checkbox').prop("checked")) {
+//    clearInterval(timerId);
+//    }
+//});
