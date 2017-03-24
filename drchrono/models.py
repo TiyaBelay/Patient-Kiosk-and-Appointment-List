@@ -41,8 +41,10 @@ class Patient(models.Model):
     race = models.CharField(max_length=20, null=True)
     social_security_number = USSocialSecurityNumberField(null=True)
     appointment_status = models.CharField(max_length=30, default="Not Arrived")
-    scheduled_time = models.DateField(default=localtime(now()).date())
+    scheduled_time = models.DateTimeField(null=True)
     duration = models.IntegerField(default=30)
+    arrived_time = models.TimeField(null=True)
+    seen_by_doc = models.TimeField(null=True)
 
     def __unicode__(self):
         return self.first_name

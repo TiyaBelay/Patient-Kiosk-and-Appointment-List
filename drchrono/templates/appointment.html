@@ -15,7 +15,7 @@
             <th>Status</th>
             <th>Check In Time</th>
             <th>Wait Time</th>
-            <th>Seeing Patient</th>
+            <th>See Patient</th>
         </tr>
     </thead>
     <tbody>
@@ -23,16 +23,25 @@
             <tr>
                 <td>{{ appointment.first_name }}</td>
                 <td>{{ appointment.last_name }}</td>
-                <td>{{ appointment.scheduled_time}}</td>
+                <td>{{ appointment.scheduled_time }}</td>
                 <td>{{ appointment.exam_room }}</td>
                 <td>{{ appointment.duration }}</td>
                 <td>{{ appointment.appointment_status }}</td>
-                <td>{{ appointment.check_in }}</td>
-                <td>{{ appointment.wait_time }}</td>
-                <td><input type="checkbox"></td>
+                <td>{{ appointment.arrived_time }}</td>
+                <td id="timer"></td>
+                <td style="text-align:center;"><input type="checkbox"></td>
             </tr>
         {% endfor %}
     </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="7" style="text-align:right">Average wait time:</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </tfoot>
 </table>
+
+<script src="/static/js/main.js"></script>
 
 {% endblock %}

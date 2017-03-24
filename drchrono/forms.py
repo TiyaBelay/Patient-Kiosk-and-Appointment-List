@@ -13,6 +13,7 @@ class PatientForm(forms.ModelForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
 
+
 class DemographicForm(forms.ModelForm):
     class Meta:
         model = Patient

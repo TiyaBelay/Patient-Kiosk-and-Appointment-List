@@ -10,7 +10,7 @@ from .models import Doctor, Patient
 from .forms import PatientForm, DemographicForm
 
 #Python
-import datetime
+import datetime, time
 import requests, pytz
 
 from drchrono.settings import SOCIAL_AUTH_DRCHRONO_KEY, SOCIAL_AUTH_DRCHRONO_SECRET
@@ -93,17 +93,20 @@ def check_in(request):
     data = requests.get(patients_url, headers=headers).json()
 
     for data in data['results']:
-        patient = Patient(patient_id=data['id'], first_name=data['first_name'], middle_name=data['middle_name'],
-                          last_name=data['last_name'], date_of_birth=data['date_of_birth'], gender=data['gender'],
-                          address=data['address'], city=data['city'], state=data['state'], zip_code=data['zip_code'],
-                          cell_phone=data['cell_phone'], email=data['email'], ethnicity=data['ethnicity'],
-                          preferred_language=data['preferred_language'], race=data['race'],
-                          social_security_number=data['social_security_number'],
-                          emergency_contact_name=data['emergency_contact_name'],
-                          emergency_contact_phone=data['emergency_contact_phone'],
-                          emergency_contact_relation=data['emergency_contact_relation'],
-                          )
-        patient.save()
+        if Patient.objects.filter(patient_id=data['id']).exists():
+            pass
+        else:
+            patient = Patient(patient_id=data['id'], first_name=data['first_name'], middle_name=data['middle_name'],
+                              last_name=data['last_name'], date_of_birth=data['date_of_birth'], gender=data['gender'],
+                              address=data['address'], city=data['city'], state=data['state'], zip_code=data['zip_code'],
+                              cell_phone=data['cell_phone'], email=data['email'], ethnicity=data['ethnicity'],
+                              preferred_language=data['preferred_language'], race=data['race'],
+                              social_security_number=data['social_security_number'],
+                              emergency_contact_name=data['emergency_contact_name'],
+                              emergency_contact_phone=data['emergency_contact_phone'],
+                              emergency_contact_relation=data['emergency_contact_relation'],
+                              )
+            patient.save()
 
     form = PatientForm()
     return render(request, 'check_in.html', {'form': form})
@@ -151,12 +154,24 @@ def checked_in(request):
 
         if form.is_valid():
             patient.appointment_status = "Arrived"
+            today = datetime.datetime.today()
+            patient.arrived_time = utc_to_pacific(today).strftime("%H:%M:%S %P")
             form.save()
-            return redirect('checked_in')
 
     doc = Doctor.objects.get(user=request.user)
 
     return render(request, 'checked_in.html', {'doc': doc})
+
+
+def utc_to_pacific(today):
+    """Convert UTC datetime to Pacific (Daylight savings aware)"""
+
+    utc = pytz.timezone('UTC')
+    aware_date = utc.localize(today)
+    pacific = pytz.timezone('US/Pacific')
+    pacific_datetime = aware_date.astimezone(pacific)
+
+    return pacific_datetime
 
 
 def appointments(request):
@@ -177,7 +192,8 @@ def appointments(request):
 
     appointments_url = 'https://drchrono.com/api/appointments'
 
-    data = requests.get(appointments_url, params={'data': data, 'date': datetime.date.today().strftime('%Y-%m-%d')},
+    today = datetime.datetime.today()
+    data = requests.get(appointments_url, params={'data': data, 'date': utc_to_pacific(today).strftime('%Y-%m-%d')},
                         headers=headers).json()
     appointment_info = data['results']
 
@@ -192,14 +208,10 @@ def appointments(request):
 
     return render(request, 'appointment.html', {'patients_and_appointments': patients_and_appointments})
 
-#TODO: Patient wait period
-#TODO: Doctor needs to indicate that they are seeing a patient
-#TODO: Overall average wait time for patient
 
-def patient_wait_period(request):
-    """Display how long a patient waited for"""
-
-
+# TODO: Patient wait period
+# TODO: Doctor needs to indicate that they are seeing a patient
+# TODO: Overall average wait time for patient
 
 def average_wait_time(request):
     """Display average wait time for all patients"""

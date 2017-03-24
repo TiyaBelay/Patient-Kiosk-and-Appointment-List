@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% load crispy_forms_tags %}
 {% block content %}
 
 <h1><center>Check-In Kiosk</center></h1>
@@ -20,9 +19,9 @@
 <legend></legend>
 <br>
 
-<form method="post" action="/demographic/" align="center" class="form-group col-sm-2 col-sm-offset-5">
+<form method="post" action="{% url 'demographic' %}" align="center" class="form-group col-sm-2 col-sm-offset-5">
     {% csrf_token %}
-    {{ form|crispy }}
+    {{ form.as_p }}
     <br>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
